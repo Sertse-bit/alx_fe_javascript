@@ -4,26 +4,65 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dynamic Quote Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 0 20px;
+    }
+    h1, h2 {
+      color: #333;
+    }
+    input, select, button {
+      margin: 5px 0;
+      padding: 8px;
+      font-size: 14px;
+    }
+    button {
+      cursor: pointer;
+    }
+    #quoteDisplay p {
+      background-color: #f2f2f2;
+      padding: 10px;
+      margin: 5px 0;
+      border-left: 4px solid #4CAF50;
+    }
+  </style>
 </head>
 <body>
+
   <h1>Dynamic Quote Generator</h1>
-<h2>Manage Quotes</h2>
-<button onclick="exportToJsonFile()">Export Quotes</button>
-<br><br>
-<input type="file" id="importFile" accept=".json" onchange="importFromJsonFile(event)" />
 
-  <!-- Quote Display Area -->
+  <!-- Display random quote -->
   <div id="quoteDisplay"></div>
+  <button id="newQuote" onclick="showRandomQuote()">Show Random Quote</button>
 
-  <!-- Show New Quote Button -->
-  <button id="newQuote">Show New Quote</button>
+  <hr>
 
-  <!-- Form to Add New Quotes -->
+  <!-- Add new quote -->
+  <h2>Add a New Quote</h2>
   <div>
     <input id="newQuoteText" type="text" placeholder="Enter a new quote" />
     <input id="newQuoteCategory" type="text" placeholder="Enter quote category" />
     <button onclick="addQuote()">Add Quote</button>
   </div>
+
+  <hr>
+
+  <!-- Filter by category -->
+  <h2>Filter Quotes by Category</h2>
+  <select id="categoryFilter" onchange="filterQuotes()">
+    <option value="all">All Categories</option>
+  </select>
+
+  <hr>
+
+  <!-- JSON Import/Export -->
+  <h2>Import / Export Quotes</h2>
+  <button onclick="exportToJsonFile()">Export Quotes</button>
+  <br><br>
+  <input type="file" id="importFile" accept=".json" onchange="importFromJsonFile(event)" />
 
   <script src="script.js"></script>
 </body>
