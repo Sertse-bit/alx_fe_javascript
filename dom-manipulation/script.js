@@ -153,7 +153,7 @@ function displayQuotes(quotesArray) {
 }
 
 // ====== Server Sync & Conflict Resolution ======
-async function fetchServerQuotes() {
+async function fetchQuotesFromServer() { // ✅ Correct function name
   try {
     const response = await fetch('https://jsonplaceholder.typicode.com/posts'); // Replace with your server URL
     const serverData = await response.json();
@@ -165,7 +165,7 @@ async function fetchServerQuotes() {
 }
 
 async function syncWithServer() {
-  const serverQuotes = await fetchServerQuotes();
+  const serverQuotes = await fetchQuotesFromServer(); // Updated function name
 
   const mergedQuotes = [...serverQuotes];
 
@@ -183,6 +183,7 @@ async function syncWithServer() {
   notifyUser("Quotes synced with server! Conflicts resolved.");
 }
 
+// ====== User Notification ======
 function notifyUser(message) {
   const notification = document.createElement("div");
   notification.textContent = message;
@@ -194,7 +195,7 @@ function notifyUser(message) {
   setTimeout(() => notification.remove(), 5000);
 }
 
-// Periodic Sync (every 5 minutes)
+// ====== Periodic Sync ======
 setInterval(syncWithServer, 5 * 60 * 1000);
 
 // ====== Initialize on Page Load ======
