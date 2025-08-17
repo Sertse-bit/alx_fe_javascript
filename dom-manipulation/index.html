@@ -7,6 +7,10 @@
 </head>
 <body>
   <h1>Dynamic Quote Generator</h1>
+<h2>Manage Quotes</h2>
+<button onclick="exportToJsonFile()">Export Quotes</button>
+<br><br>
+<input type="file" id="importFile" accept=".json" onchange="importFromJsonFile(event)" />
 
   <!-- Quote Display Area -->
   <div id="quoteDisplay"></div>

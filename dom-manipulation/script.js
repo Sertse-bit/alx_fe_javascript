@@ -82,3 +82,86 @@ function addQuote() {
 
 // ✅ Call the form creator when page loads
 createAddQuoteForm();
+let quotes = [
+  { text: "The journey of a thousand miles begins with one step.", category: "Motivation" },
+  { text: "Life is what happens when you're busy making other plans.", category: "Life" }
+];
+
+// ✅ Save quotes to localStorage
+function saveQuotes() {
+  localStorage.setItem("quotes", JSON.stringify(quotes));
+}
+
+// ✅ Load quotes from localStorage
+function loadQuotes() {
+  const storedQuotes = localStorage.getItem("quotes");
+  if (storedQuotes) {
+    quotes = JSON.parse(storedQuotes);
+  }
+}
+
+// ✅ Show random quote and save to sessionStorage
+function showRandomQuote() {
+  if (quotes.length === 0) {
+    document.getElementById("quoteDisplay").innerText = "No quotes available.";
+    return;
+  }
+
+  const randomIndex = Math.floor(Math.random() * quotes.length);
+  const randomQuote = quotes[randomIndex];
+
+  document.getElementById("quoteDisplay").innerText =
+    `"${randomQuote.text}" — ${randomQuote.category}`;
+
+  sessionStorage.setItem("lastQuote", JSON.stringify(randomQuote));
+}
+
+// ✅ Load last viewed quote from sessionStorage
+function loadLastQuote() {
+  const last = sessionStorage.getItem("lastQuote");
+  if (last) {
+    const quote = JSON.parse(last);
+    document.getElementById("quoteDisplay").innerText =
+      `"${quote.text}" — ${quote.category}`;
+  }
+}
+
+// ✅ Export to JSON file
+function exportToJsonFile() {
+  const dataStr = JSON.stringify(quotes, null, 2);
+  const blob = new Blob([dataStr], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "quotes.json";
+  a.click();
+
+  URL.revokeObjectURL(url);
+}
+
+// ✅ Import from JSON file
+function importFromJsonFile(event) {
+  const fileReader = new FileReader();
+  fileReader.onload = function (e) {
+    try {
+      const importedQuotes = JSON.parse(e.target.result);
+      if (Array.isArray(importedQuotes)) {
+        quotes.push(...importedQuotes);
+        saveQuotes();
+        alert("Quotes imported successfully!");
+      } else {
+        alert("Invalid JSON format.");
+      }
+    } catch (err) {
+      alert("Error reading file: " + err.message);
+    }
+  };
+  fileReader.readAsText(event.target.files[0]);
+}
+
+// Load data when page starts
+window.onload = function () {
+  loadQuotes();
+  loadLastQuote();
+};
