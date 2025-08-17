@@ -41,6 +41,22 @@ function loadLastQuote() {
   }
 }
 
+// ====== Post New Quote to Server ======
+async function postQuoteToServer(newQuote) {
+  try {
+    await fetch('https://jsonplaceholder.typicode.com/posts', { // replace with your server URL
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(newQuote)
+    });
+    console.log("Quote posted to server:", newQuote);
+  } catch (err) {
+    console.error("Failed to post quote to server:", err);
+  }
+}
+
 // ====== Add Quote Function ======
 function addQuote() {
   const quoteTextInput = document.getElementById("newQuoteText");
@@ -54,10 +70,14 @@ function addQuote() {
     return;
   }
 
-  quotes.push({ text: newText, category: newCategory });
-  saveQuotes();          // Update localStorage
-  populateCategories();  // Refresh dropdown dynamically
-  filterQuotes();        // Refresh displayed quotes
+  const newQuote = { text: newText, category: newCategory };
+  quotes.push(newQuote);
+  saveQuotes();
+  populateCategories();
+  filterQuotes();
+
+  // ✅ Post new quote to server
+  postQuoteToServer(newQuote);
 
   quoteTextInput.value = "";
   quoteCategoryInput.value = "";
@@ -153,9 +173,9 @@ function displayQuotes(quotesArray) {
 }
 
 // ====== Server Sync & Conflict Resolution ======
-async function fetchQuotesFromServer() { // ✅ Correct function name
+async function fetchQuotesFromServer() {
   try {
-    const response = await fetch('https://jsonplaceholder.typicode.com/posts'); // Replace with your server URL
+    const response = await fetch('https://jsonplaceholder.typicode.com/posts'); // replace with your server URL
     const serverData = await response.json();
     return serverData.map(item => ({ text: item.title, category: "Server" }));
   } catch (err) {
@@ -165,7 +185,7 @@ async function fetchQuotesFromServer() { // ✅ Correct function name
 }
 
 async function syncWithServer() {
-  const serverQuotes = await fetchQuotesFromServer(); // Updated function name
+  const serverQuotes = await fetchQuotesFromServer();
 
   const mergedQuotes = [...serverQuotes];
 
